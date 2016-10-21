@@ -3,8 +3,8 @@ package main
 import (
   "fmt"
   "sort"
-
 )
+
 func pprint(a [][]int) {
   t := len(a)
   for i := 0; i < t; i++ {
@@ -13,12 +13,13 @@ func pprint(a [][]int) {
 }
 
 func Search(array []int, element int) int {
+  index := -1
   for i := 0; i < len(array); i++ {
     if array[i] == element {
-      return i 
+      index = i 
     }
   }
-  return -1
+  return index
 }
 func IntMin(n int, m int) int {
   if n < m {
@@ -70,26 +71,11 @@ func SimpleSort(targer string, string_array []string) []string {
   copy(distances_sorted, distances)
   sort.Ints(distances_sorted)
   result := make([]string, len(string_array))
-  for i := 0; i < len(string_array); i++ {
+  for i := 0; i < len(distances_sorted); i++ {
     index := Search(distances, distances_sorted[i])
     result[i] = string_array[index]
-  }  
-  return result
-}
-
-func NotSimpleSort(targer string, string_array []string) []string {
-  distances := make(map[int]map[string][int])
-  distances := make([]int, len(string_array))
-  for i := 0; i < len(string_array); i++ {
-    distances[i] = LevenshteinDistance(targer, string_array[i])
-  }
-  distances_sorted := make([]int, len(string_array))
-  copy(distances_sorted, distances)
-  sort.Ints(distances_sorted)
-  result := make([]string, len(string_array))
-  for i := 0; i < len(string_array); i++ {
-    index := Search(distances, distances_sorted[i])
-    result[i] = string_array[index]
+    distances = append(distances[:index], distances[index+1:]...)
+    string_array = append(string_array[:index], string_array[index+1:]...)
   }  
   return result
 }
@@ -99,7 +85,7 @@ func main() {
   fmt.Println(LevenshteinDistance("sitting", "substitutionCost"))
 
   targer := "stat1"
-  sample_array := []string{"stat132323232", "stat13", "stat14"}
+  sample_array := []string{"day", "pay", "kitten", "chick"}
   
   fmt.Println(SimpleSort(targer, sample_array))
 
